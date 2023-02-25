@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "title": "Product1",
+    "count": 10,
+    "price": 20,
+    "description": "Product1 description",
+    "logo": "//path"
+  },
+  {
+    "id": "2",
+    "title": "Product2",
+    "count": 3,
+    "price": 78,
+    "description": "Product2 description",
+    "logo": "//path"
+  },
+  {
+    "id": "3",
+    "title": "Product3",
+    "count": 10,
+    "price": 55,
+    "description": "Product3 description",
+    "logo": "//path"
+  },
+  {
+    "id": "4",
+    "title": "Product4",
+    "count": 60,
+    "price": 15,
+    "description": "Product4 description",
+    "logo": "//path"
+  }
+]

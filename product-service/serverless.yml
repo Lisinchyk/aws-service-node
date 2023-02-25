@@ -1,0 +1,55 @@
+service: product-service
+app: product-service
+frameworkVersion: "3"
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  stage: dev
+
+plugins:
+  - serverless-auto-swagger
+  - serverless-webpack
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+  autoswagger:
+    apiType: "httpApi"
+    generateSwaggerOnDeploy: true
+    typefiles: ["./src/models/types.ts"]
+    title: "product-service"
+    host: "z93dh321nh.execute-api.us-east-1.amazonaws.com/dev"
+  #    swaggerFiles: [ './src/products.json',  ]
+  #    swaggerPath: 'string'
+  #    apiKeyHeaders: [ "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Methods" ]
+  #    useStage: true | false
+  #    basePath: '/string'
+  #    schemes: [ 'http', 'https', 'ws', 'wss' ]
+  #    excludeStages: [ 'production', 'anyOtherStage' ]
+  #    lambdaAuthorizer: ${self:custom.myAuthorizer}
+  #    useRedirectUI: true | false
+
+functions:
+  getProductsList:
+    handler: handler.getProductsList
+    events:
+      - http:
+          path: products
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  getProductsById:
+    handler: handler.getProductsById
+    events:
+      - http:
+          path: products/{productId}
+          method: get
+          request:
+            parameters:
+              paths:
+                productId: true
+          cors:
+            origin: "*"
+            allowCredentials: false
