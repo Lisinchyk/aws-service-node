@@ -14,7 +14,7 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async
       });
     }
 
-    return formatJSONResponse({ products }, 200);
+    return formatJSONResponse(products, 200);
 
   } catch (error) {
     return formatJSONResponse({

@@ -16,7 +16,7 @@ describe("getProductList", () => {
     await LambdaTester(getProductList).expectResult(
       (result) => {
         expect(result.statusCode).toBe(200);
-        expect(result.body).toBe(JSON.stringify({ products }));
+        expect(result.body).toBe(JSON.stringify({ data: products }));
       }
     );
   });
