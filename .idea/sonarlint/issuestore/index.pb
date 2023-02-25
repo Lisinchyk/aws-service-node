@@ -1,8 +1,6 @@
 
 Q
 !product-service/webpack.config.js,c/c/cc7c38791d6b9dfc38ed7b4246e26386a907067b
-J
-product-service/.gitignore,7/e/7e35b8348ccc1e9f1dba3711386c5b915291620b
 R
 "product-service/swagger/swagger.js,d/e/de1a6c18389697ade0d94db5cdc8ca61532ba5a9
 [

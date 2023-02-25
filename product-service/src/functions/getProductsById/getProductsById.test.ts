@@ -17,7 +17,7 @@ describe("getProductsById", () => {
       .event({pathParameters: { productId: "3" }})
       .expectResult((result) => {
         expect(result.statusCode).toBe(200);
-        expect(result.body).toBe(JSON.stringify({ product }));
+        expect(result.body).toBe(JSON.stringify(product));
       }
     );
   });
