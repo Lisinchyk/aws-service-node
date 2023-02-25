@@ -4,8 +4,13 @@
 - getProductsList
 - getProductsById
 
-### Swagger:
-[Swagger link](https://27ryd2a6z9.execute-api.us-east-1.amazonaws.com/swagger) try API
+### LINKS:
+- [Swagger](https://27ryd2a6z9.execute-api.us-east-1.amazonaws.com/swagger) try API
+- [S3 Bucket link](http://lis-store-app-react.s3-website-us-east-1.amazonaws.com/) 403 Forbidden
+- [CloudFront link](https://d1areo6ly74sdt.cloudfront.net/) website
+- [FrontEnd Git Repo](https://github.com/Lisinchyk/shop-react-redux-cloudfront/pull/2) PR Task3
+- [getProductsList](https://z93dh321nh.execute-api.us-east-1.amazonaws.com/dev/products) GET Products
+- [getProductsById](https://z93dh321nh.execute-api.us-east-1.amazonaws.com/dev/products/{productId}) Get Product by ID
 
 ### Available Scripts:
 ### `deploy:dev`
