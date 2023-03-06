@@ -8,6 +8,8 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async
   try {
     const products = await ProductServices.getAllProducts();
 
+    console.log("products", products);
+
     if (!products.length) {
       return formatJSONResponse({
         message: ERRORS_MESSAGES.PRODUCTS_NOT_FOUND
