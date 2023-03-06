@@ -2,8 +2,8 @@ import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { ProductServices } from "../../services";
 import { ERRORS_MESSAGES } from "../../constants";
+import { productValidation } from "../../utils";
 import schema from "./schema";
-import {productValidation} from "../../utils";
 
 const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {

@@ -24,20 +24,33 @@
           }
         }
       },
-      "put": {
+      "post": {
         "summary": "createProduct",
         "description": "",
-        "operationId": "createProduct.put.products",
+        "operationId": "createProduct.post.products",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IProduct"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "New product was successfully created",
+            "schema": {
+              "$ref": "#/definitions/IProduct"
+            }
           }
         }
       }
@@ -91,10 +104,6 @@
         "description": {
           "title": "IProducts.description",
           "type": "string"
-        },
-        "logo": {
-          "title": "IProducts.logo",
-          "type": "string"
         }
       },
       "required": [
@@ -102,11 +111,39 @@
         "title",
         "count",
         "price",
-        "description",
-        "logo"
+        "description"
       ],
       "additionalProperties": false,
       "title": "IProducts",
+      "type": "object"
+    },
+    "IProduct": {
+      "properties": {
+        "title": {
+          "title": "IProduct.title",
+          "type": "string"
+        },
+        "count": {
+          "title": "IProduct.count",
+          "type": "number"
+        },
+        "price": {
+          "title": "IProduct.price",
+          "type": "number"
+        },
+        "description": {
+          "title": "IProduct.description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "count",
+        "price",
+        "description"
+      ],
+      "additionalProperties": false,
+      "title": "IProduct",
       "type": "object"
     }
   },

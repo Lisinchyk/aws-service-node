@@ -21,9 +21,7 @@ const isValidDataType = (product) => {
 
 const checkEmptyFields = (product) => {
   for (const field of schema.required) {
-    const value = product[field];
-
-    if (!value || !value.length) {
+    if (!product[field]) {
       return true;
     }
   }

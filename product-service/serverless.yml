@@ -63,7 +63,19 @@ functions:
     events:
       - http:
           path: products
-          method: put
+          method: post
+          responses:
+            200:
+              description: "New product was successfully created"
+              bodyType: IProduct
+          bodyType: IProduct
           cors:
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
             origin: "*"
             allowCredentials: false
