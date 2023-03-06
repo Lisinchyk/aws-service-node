@@ -1,11 +1,16 @@
 service: product-service
 app: product-service
 frameworkVersion: "3"
+useDotenv: true
 provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
   stage: dev
+  environment:
+    DB_NAME_PRODUCTS: ${env:DB_NAME_PRODUCTS}
+    DB_NAME_STOCK: ${env:DB_NAME_STOCK}
+    REGION: ${env:REGION}
 
 plugins:
   - serverless-auto-swagger
@@ -50,6 +55,15 @@ functions:
             parameters:
               paths:
                 productId: true
+          cors:
+            origin: "*"
+            allowCredentials: false
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - http:
+          path: products
+          method: put
           cors:
             origin: "*"
             allowCredentials: false

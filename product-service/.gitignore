@@ -11,3 +11,6 @@ swagger
 
 #IDE directories
 .idea
+
+#env variables
+.env
