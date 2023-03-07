@@ -10,4 +10,7 @@ swagger
 .webpack
 
 #IDE directories
-.idea
+.idea/
+
+#env variables
+.env
