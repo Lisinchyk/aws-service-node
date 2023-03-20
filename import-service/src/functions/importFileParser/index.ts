@@ -5,7 +5,7 @@ export default {
   events: [
     {
       s3: {
-        bucket: `${process.env.BUCKET_NAME}`,
+        bucket: "digital-shop-files",
         event: "s3:ObjectCreated:*",
         rules: [
           { prefix: "uploaded/" }

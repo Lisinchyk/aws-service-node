@@ -12,6 +12,7 @@ const serverlessConfiguration: AWS = {
   plugins: ["serverless-webpack"],
   provider: {
     name: "aws",
+    profile: "anatolii-aws",
     runtime: "nodejs16.x",
     region: "us-east-1",
     stage: "dev",
@@ -28,8 +29,8 @@ const serverlessConfiguration: AWS = {
         Effect: "Allow",
         Action: ["s3:*"],
         Resource: [
-          `arn:aws:s3:::${process.env.BUCKET_NAME}`,
-          `arn:aws:s3:::${process.env.BUCKET_NAME}/*`
+          `arn:aws:s3:::digital-shop-files`,
+          `arn:aws:s3:::digital-shop-files/*`
         ]
       }
     ]

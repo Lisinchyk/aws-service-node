@@ -8,6 +8,8 @@ export const importProductsFile = async (event) => {
 
     const name = event.queryStringParameters.name;
 
+    console.log("Uploaded file name", name);
+
     if (!name) {
       return formatJSONResponse({
         message: "File name can not be empty"
@@ -15,7 +17,7 @@ export const importProductsFile = async (event) => {
     }
 
     const url = await S3BucketService.getFileUrl({
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: "digital-shop-files",
       Key: `${S3_FOLDER.UPLOADED}/${name}`,
       Expires: 60,
       ContentType: "text/csv",
