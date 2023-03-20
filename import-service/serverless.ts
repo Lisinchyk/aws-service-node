@@ -26,13 +26,11 @@ const serverlessConfiguration: AWS = {
     iamRoleStatements: [
       {
         Effect: "Allow",
-        Action: ["s3:ListBucket"],
-        Resource: `arn:aws:s3:::${process.env.BUCKET_NAME}`
-      },
-      {
-        Effect: "Allow",
         Action: ["s3:*"],
-        Resource: `arn:aws:s3:::${process.env.BUCKET_NAME}/*`
+        Resource: [
+          `arn:aws:s3:::${process.env.BUCKET_NAME}`,
+          `arn:aws:s3:::${process.env.BUCKET_NAME}/*`
+        ]
       }
     ]
   },
