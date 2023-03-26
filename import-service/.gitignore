@@ -10,3 +10,4 @@ coverage
 # esbuild directories
 .webpack
 /coverage/
+.env

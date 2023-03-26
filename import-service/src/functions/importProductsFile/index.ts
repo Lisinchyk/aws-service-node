@@ -1,21 +1,40 @@
-import { handlerPath } from "@libs/handler-resolver";
+import { formatJSONResponse } from '@libs/api-gateway';
+import { S3BucketService } from "../../services/S3BucketService";
+import { S3_FOLDER } from "../../constants";
 
-export default {
-  handler: `${handlerPath(__dirname)}/handler.importProductsFile`,
-  events: [
-    {
-      http: {
-        method: "get",
-        path: "import",
-        request: {
-          parameters: {
-            queryStrings: {
-              name: true
-            }
-          }
-        },
-        cors: true
-      }
+export const importProductsFile = async (event) => {
+  try {
+    console.log("Function called with event:", event);
+
+    const name = event.queryStringParameters.name;
+
+    console.log("Uploaded file name", name);
+
+    if (!name) {
+      return formatJSONResponse({
+        message: "File name can not be empty"
+      }, 400);
     }
-  ]
+
+    const url = await S3BucketService.getFileUrl({
+      Bucket: "digital-shop-files",
+      Key: `${S3_FOLDER.UPLOADED}/${name}`,
+      Expires: 60,
+      ContentType: "text/csv",
+    });
+
+    if (!url) {
+      return formatJSONResponse({
+        message: "Can not get URL",
+      }, 500);
+    }
+
+    console.log("Success, URL:", url);
+
+    return formatJSONResponse({ url }, 200);
+  } catch (error) {
+    return formatJSONResponse({
+      message: error.message
+    }, 500);
+  }
 };

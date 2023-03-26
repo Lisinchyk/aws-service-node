@@ -1,6 +1,7 @@
 import getProductsList from "./src/functions/getProductsList";
 import getProductsById from "./src/functions/getProductsById";
 import createProduct from "./src/functions/createProduct";
+import catalogBatchProcess from "@functions/catalogBatchProcess";
 import { DynamoDataBaseUtils } from "./src/utils";
 import {
   PARAMS_PRODUCTS,
@@ -20,5 +21,6 @@ clientDB.createNewDataBase(process.env.DB_NAME_STOCK, PARAMS_STOCK);
 export {
   getProductsList,
   getProductsById,
-  createProduct
+  createProduct,
+  catalogBatchProcess
 };

@@ -1,0 +1,56 @@
+service: import-service
+app: import-service
+frameworkVersion: "3"
+useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  profile: ${env:PROFILE_NAME}
+  stage: dev
+  environment:
+    SQS_ARN: ${env:SQS_ARN}
+    SQS_URL: ${env:SQS_URL}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource:
+        - arn:aws:s3:::${env:BUCKET_NAME}
+        - arn:aws:s3:::${env:BUCKET_NAME}/*
+    - Effect: Allow
+      Action:
+        - sqs:*
+      Resource:
+        - Fn::ImportValue: SQSQueueOutput
+
+plugins:
+  - serverless-webpack
+package:
+  individually: true
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - http:
+          method: get
+          path: import
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: ${env:BUCKET_NAME}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true

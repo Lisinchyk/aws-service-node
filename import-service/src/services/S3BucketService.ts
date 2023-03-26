@@ -19,24 +19,41 @@ export class S3BucketService {
         Key: objectKey
       });
     } catch (error) {
+      console.log("Error during get s3 Object", error);
       return error.message;
     }
   };
 
-  static async createReadStream ( s3Object ) {
-    try {
-      s3Object
-        .createReadStream()
-        .pipe(csv())
-        .on("data", (data) => console.log(data));
+  static async createReadStream (s3Object) {
+    const sqs = new AWS.SQS();
+    const products = [];
+    const result = await s3Object
+      .createReadStream()
+      .pipe(csv(["title", "price", "description", "count"]))
+      .on("data", async (product) => {
+        try {
+          await this.sendMessageToSQS(sqs, product);
+          products.push(product);
+          console.log("Message has been sent to SQS", product);
+        } catch (error) {
+          console.log("Error during sendMessageToSQS", error.message);
+        }
+        return products;
+      })
+      .on("error", (error) => {
+        console.log("createReadStream ERROR", error.message);
+      })
+      .on("end", async (products) => {
+        console.log("createReadStream END", products);
+        return products;
+      });
 
-      return s3Object;
-    } catch (error) {
-      return error.message;
-    }
+    console.log("RESULT", result);
+    return result;
   };
 
   static async copyObject ({ s3, bucketName, objectKey }) {
+    console.log("copyObject", s3, bucketName, objectKey);
     try {
       await s3
         .copyObject({
@@ -61,5 +78,21 @@ export class S3BucketService {
     } catch (error) {
       return error.message;
     }
+  };
+
+  static async sendMessageToSQS (sqs, messageBody) {
+    await sqs.sendMessage(
+      {
+        QueueUrl: process.env.SQS_URL,
+        MessageBody: JSON.stringify(messageBody),
+      },
+      (error, data) => {
+        if (error) {
+          console.log('SQS error', error);
+          throw Error(error);
+        }
+        console.log(`Send message:`, data);
+      },
+    );
   };
 }
