@@ -21,7 +21,7 @@ import {
 
 dotenv.config();
 
-export class DynamoDataBaseUtils {
+class DynamoDataBaseService {
   _dynamoClient = this.initClient();
   _dynamoDocClient = this.initDocClient();
   _productsDB = process.env.DB_NAME_PRODUCTS;
@@ -164,3 +164,5 @@ export class DynamoDataBaseUtils {
     }
   }
 }
+
+export default new DynamoDataBaseService();

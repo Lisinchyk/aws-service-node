@@ -1,9 +1,9 @@
 import { SNS } from "aws-sdk";
-import { clientDB } from "../../handler";
+import dynamoDataBaseService from "../services/index";
 
 export class ProductServices {
   static async getAllProducts() {
-    const { products, stock } = await clientDB.getAllItems();
+    const { products, stock } = await dynamoDataBaseService.getAllItems();
 
     return products.map(prod => {
       const { count } = stock.find(({ product_id }) => product_id === prod.id);
@@ -16,11 +16,11 @@ export class ProductServices {
   };
 
   static async getProductById(productId: string) {
-    return  clientDB.getItemById(productId);
+    return  dynamoDataBaseService.getItemById(productId);
   };
 
   static async createProduct(newItem) {
-    return await clientDB.addItem(newItem);
+    return await dynamoDataBaseService.addItem(newItem);
   };
 
   static publishProducts(products) {

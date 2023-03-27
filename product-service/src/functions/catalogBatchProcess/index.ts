@@ -10,8 +10,6 @@ const catalogBatchProcess = async (event) => {
   try {
     const records = event.Records.map(({ body }) => JSON.parse(body));
 
-    console.log("catalogBatchProcess records", records);
-
     const products = records.reduce((products, record) => {
       const validationResult = productValidation(record, schema);
 
@@ -23,8 +21,6 @@ const catalogBatchProcess = async (event) => {
 
       return products;
     }, []);
-
-    console.log("catalogBatchProcess products", products);
 
     if(!products.length) {
       return formatJSONResponse({
@@ -42,7 +38,6 @@ const catalogBatchProcess = async (event) => {
       message: "catalogBatchProcess: Products have been created and published",
     }, 200);
   } catch (error) {
-    console.log("catalogBatchProcess finished  with error:", error.message);
     return formatJSONResponse({ message: error.message });
   }
 };
