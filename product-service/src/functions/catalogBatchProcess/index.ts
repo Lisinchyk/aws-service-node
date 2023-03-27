@@ -36,12 +36,10 @@ const catalogBatchProcess = async (event) => {
       await ProductServices.createProduct(product);
     }
 
-    const publishResult = await ProductServices.publishProducts(products);
-
-    console.log("catalogBatchProcess publishResult", publishResult);
+    await ProductServices.publishProducts(products);
 
     return formatJSONResponse({
-      message: `catalogBatchProcess: Products have been created and published`,
+      message: "catalogBatchProcess: Products have been created and published",
     }, 200);
   } catch (error) {
     console.log("catalogBatchProcess finished  with error:", error.message);

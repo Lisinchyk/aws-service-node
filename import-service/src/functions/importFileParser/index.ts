@@ -1,9 +1,10 @@
 import { formatJSONResponse } from "@libs/api-gateway";
 import { S3BucketService } from "../../services/S3BucketService";
+import { createReadStream } from "../../utils";
 import { S3_FOLDER } from "../../constants";
 
 export const importFileParser = async (event) => {
-  console.log("Function called with event:", event);
+  console.log("Function importFileParser was called with event:", JSON.stringify(event));
   try {
     const s3 = S3BucketService.init();
     const records = event.Records;
@@ -16,7 +17,7 @@ export const importFileParser = async (event) => {
       };
 
       const object = await S3BucketService.getObject(params);
-      await S3BucketService.createReadStream(object);
+      await createReadStream(object);
       await S3BucketService.copyObject(params);
       await S3BucketService.deleteObject(params);
     }

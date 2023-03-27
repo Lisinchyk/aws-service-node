@@ -19,10 +19,9 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:*
-      Resource: [
-        "arn:aws:dynamodb:us-east-1:377899728263:table/digital_shop_products",
-        "arn:aws:dynamodb:us-east-1:377899728263:table/digital_shop_stock"
-      ]
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DB_NAME_PRODUCTS}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DB_NAME_STOCK}"
     - Effect: Allow
       Action: sns:*
       Resource:
@@ -114,14 +113,14 @@ resources:
       Type: AWS::SNS::Subscription
       Properties:
         Protocol: email
-        Endpoint: ${env:SUB_EMAIL}
+        Endpoint: ${env:SUB_EMAIL_1}
         TopicArn:
           Ref: SNSTopic
     SNSExpensiveProductSubscription:
       Type: AWS::SNS::Subscription
       Properties:
         Protocol: email
-        Endpoint: ${env:SUB_EMAIL}
+        Endpoint: ${env:SUB_EMAIL_2}
         TopicArn:
           Ref: SNSTopic
         FilterPolicy:
