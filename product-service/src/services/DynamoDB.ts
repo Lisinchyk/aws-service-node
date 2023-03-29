@@ -21,7 +21,7 @@ import {
 
 dotenv.config();
 
-export class DynamoDataBaseUtils {
+class DynamoDataBaseService {
   _dynamoClient = this.initClient();
   _dynamoDocClient = this.initDocClient();
   _productsDB = process.env.DB_NAME_PRODUCTS;
@@ -43,7 +43,7 @@ export class DynamoDataBaseUtils {
       const { TableNames } = await this._dynamoClient.send(new ListTablesCommand({}));
       return TableNames.includes(tableName);
     } catch (error) {
-      console.log("error", "Error DB connection", error.message);
+      console.log("Error DB connection", error.message);
     }
   }
 
@@ -61,7 +61,7 @@ export class DynamoDataBaseUtils {
         { TableName: tableName }
       );
     } catch (error) {
-      console.log("error", error);
+      console.log("createNewDataBase error", error.message);
     }
   }
 
@@ -95,7 +95,7 @@ export class DynamoDataBaseUtils {
         message: "New product is created and added"
       };
     } catch (error) {
-      console.log("error:", error.message);
+      console.log("addItem error:", error.message);
       return error.message;
     }
   }
@@ -117,8 +117,8 @@ export class DynamoDataBaseUtils {
         ...product.Item,
         count: stock.Item.count
       };
-    } catch (e) {
-      console.log("error", e);
+    } catch (error) {
+      console.log("getItemById error", error);
     }
   }
 
@@ -134,7 +134,7 @@ export class DynamoDataBaseUtils {
         stock: stock.Items
       };
     } catch (error) {
-      console.log("error", error.message);
+      console.log("getAllItems error", error.message);
     }
   }
 
@@ -160,7 +160,9 @@ export class DynamoDataBaseUtils {
         }
       );
     } catch (error) {
-      console.log("error", error.message);
+      console.log("deleteTable error", error.message);
     }
   }
 }
+
+export default new DynamoDataBaseService();

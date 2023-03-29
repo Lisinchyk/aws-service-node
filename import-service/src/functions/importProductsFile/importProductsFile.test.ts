@@ -1,5 +1,7 @@
 import AWS from 'aws-sdk-mock';
-import { importProductsFile } from "@functions/importProductsFile/handler";
+import { importProductsFile } from "@functions/importProductsFile/index";
+import {HEADERS} from "../../constants";
+
 
 AWS.mock(
   'S3',
@@ -19,6 +21,7 @@ describe("importProductsFile", () => {
   test("should returns valid url and status 200", async () => {
     const expectedResultSuccess = {
       statusCode: 200,
+      headers: HEADERS,
       body: JSON.stringify({
         url: {}
       }),
@@ -33,6 +36,7 @@ describe("importProductsFile", () => {
 
     const resultExpected = {
       statusCode: 400,
+      headers: HEADERS,
       body: JSON.stringify({
         message: "File name can not be empty"
       })

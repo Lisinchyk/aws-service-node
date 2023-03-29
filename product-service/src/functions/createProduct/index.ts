@@ -11,7 +11,7 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     const newProductData = JSON.parse(event.body);
     console.log("newProductData", newProductData);
 
-    const validationResult = productValidation(newProductData);
+    const validationResult = productValidation(newProductData, schema);
 
     if (validationResult) {
       return formatJSONResponse({

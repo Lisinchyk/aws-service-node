@@ -6,11 +6,32 @@ provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
+  profile: "anatolii-aws"
   stage: dev
   environment:
     DB_NAME_PRODUCTS: ${env:DB_NAME_PRODUCTS}
     DB_NAME_STOCK: ${env:DB_NAME_STOCK}
     REGION: ${env:REGION}
+    SQS_URL: SQSQueue
+    CREATE_PRODUCT_TOPIC_ARN:
+      Ref: SNSTopic
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:*
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DB_NAME_PRODUCTS}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DB_NAME_STOCK}"
+    - Effect: Allow
+      Action: sns:*
+      Resource:
+        - Fn::GetAtt:
+            - SQSQueue
+            - Arn
+    - Effect: Allow
+      Action: sns:*
+      Resource:
+       Ref: SNSTopic
 
 plugins:
   - serverless-auto-swagger
@@ -25,15 +46,6 @@ custom:
     typefiles: ["./src/models/types.ts"]
     title: "product-service"
     host: "z93dh321nh.execute-api.us-east-1.amazonaws.com/dev"
-  #    swaggerFiles: [ './src/products.json',  ]
-  #    swaggerPath: 'string'
-  #    apiKeyHeaders: [ "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Methods" ]
-  #    useStage: true | false
-  #    basePath: '/string'
-  #    schemes: [ 'http', 'https', 'ws', 'wss' ]
-  #    excludeStages: [ 'production', 'anyOtherStage' ]
-  #    lambdaAuthorizer: ${self:custom.myAuthorizer}
-  #    useRedirectUI: true | false
 
 functions:
   getProductsList:
@@ -79,3 +91,43 @@ functions:
               - X-Amz-User-Agent
             origin: "*"
             allowCredentials: false
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt: [ SQSQueue, Arn ]
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        Endpoint: ${env:SUB_EMAIL_1}
+        TopicArn:
+          Ref: SNSTopic
+    SNSExpensiveProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: email
+        Endpoint: ${env:SUB_EMAIL_2}
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          price: [ { "numeric": [ ">=", 10 ] } ]
+  Outputs:
+    SQSQueueOutput:
+      Value:
+        Fn::GetAtt: [ SQSQueue, Arn ]
+      Export:
+        Name: SQSQueueOutput

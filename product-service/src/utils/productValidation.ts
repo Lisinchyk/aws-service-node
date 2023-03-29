@@ -1,25 +1,23 @@
-import schema from "@functions/createProduct/schema";
-
-export const productValidation = (product) => {
-  if (isValidDataType(product)) {
+export const productValidation = (product, schema) => {
+  if (isValidDataType(product, schema)) {
     return { message: "invalid product data type" };
   }
 
-  if (checkEmptyFields(product)) {
+  if (checkEmptyFields(product, schema)) {
     return { message: "required field is empty. Fill it and try again" };
   }
 
-  const checkFieldTypeResult = checkFieldType(product);
+  const checkFieldTypeResult = checkFieldType(product, schema);
   if (checkFieldTypeResult) {
     return checkFieldTypeResult;
   }
 };
 
-const isValidDataType = (product) => {
+const isValidDataType = (product, schema) => {
   return typeof product !== schema.type || Array.isArray(product);
 }
 
-const checkEmptyFields = (product) => {
+const checkEmptyFields = (product, schema) => {
   for (const field of schema.required) {
     if (!product[field]) {
       return true;
@@ -29,7 +27,7 @@ const checkEmptyFields = (product) => {
   return false;
 };
 
-const checkFieldType = (product) => {
+const checkFieldType = (product, schema) => {
   const fields = Object.keys(schema.properties);
   for (const field of fields) {
     const { type } = schema.properties[field];

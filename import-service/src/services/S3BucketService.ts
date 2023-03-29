@@ -1,5 +1,4 @@
 import AWS from "aws-sdk";
-import csv from "csv-parser";
 import { S3_FOLDER } from "../constants";
 
 export class S3BucketService {
@@ -19,24 +18,13 @@ export class S3BucketService {
         Key: objectKey
       });
     } catch (error) {
-      return error.message;
-    }
-  };
-
-  static async createReadStream ( s3Object ) {
-    try {
-      s3Object
-        .createReadStream()
-        .pipe(csv())
-        .on("data", (data) => console.log(data));
-
-      return s3Object;
-    } catch (error) {
+      console.log("Error during get s3 Object", error);
       return error.message;
     }
   };
 
   static async copyObject ({ s3, bucketName, objectKey }) {
+    console.log("copyObject", s3, bucketName, objectKey);
     try {
       await s3
         .copyObject({
