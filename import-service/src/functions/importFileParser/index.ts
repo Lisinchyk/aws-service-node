@@ -4,7 +4,7 @@ import { createReadStream } from "../../utils";
 import { S3_FOLDER } from "../../constants";
 
 export const importFileParser = async (event) => {
-  console.log("Function importFileParser was called with event:", JSON.stringify(event));
+  console.log("Function basicAuthorizer was called with event:", JSON.stringify(event));
   try {
     const s3 = S3BucketService.init();
     const records = event.Records;

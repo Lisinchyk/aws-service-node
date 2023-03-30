@@ -1,0 +1,32 @@
+service: authorization-service
+app: authorization-service
+frameworkVersion: "3"
+useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  profile: ${env:PROFILE_NAME}
+  stage: dev
+  environment:
+    lisinchyk: ${env:LISINCHYK}
+
+plugins:
+  - serverless-webpack
+package:
+  individually: true
+custom:
+  webpack:
+    webpackConfig: webpack.config.js
+    includeModules: true
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
+
+resources:
+  Outputs:
+    basicAuthorizerArn:
+      Export:
+        Name: basicAuthorizerArnId
+      Value: !GetAtt BasicAuthorizerLambdaFunction.Arn
