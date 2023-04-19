@@ -1,11 +1,13 @@
 import express from "express";
 import axios from "axios";
+import cors from "cors";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(cors());
 app.use(express.json());
 
 const getAxiosConfig = (res, originalUrl, method, body) => {
